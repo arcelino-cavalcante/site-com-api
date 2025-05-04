@@ -131,7 +131,7 @@
         });
 
         const data = await response.json();
-        chat.innerHTML += `<div class="msg bot"><strong>ChatGPT:</strong><br>${data.reply}</div>`;
+        chat.innerHTML += `<div class="msg bot"><strong>Tronos:</strong><br>${data.reply}</div>`;
         chat.scrollTop = chat.scrollHeight;
       } catch (err) {
         console.error("Erro ao buscar resposta:", err);
