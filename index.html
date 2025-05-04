@@ -111,36 +111,30 @@
 
   <script>
     async function sendMessage() {
-      const input = document.getElementById("input");
-      const chat = document.getElementById("chat");
-      const msg = input.value.trim();
-      if (!msg) return;
+  const input = document.getElementById("input");
+  const chat = document.getElementById("chat");
+  const msg = input.value.trim();
+  if (!msg) return;
 
-      chat.innerHTML += `<div class="msg user"><strong>Você:</strong><br>${msg}</div>`;
-      input.value = "";
-      chat.scrollTop = chat.scrollHeight;
+  console.log("Mensagem enviada:", msg); // 👈 log para teste
 
-      try {
-        const response = await fetch('const response = await fetch('https://backand-ofxw.onrender.com/chat', {
-', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ message: msg })
-        });
+  chat.innerHTML += `<div class="msg user"><strong>Você:</strong><br>${msg}</div>`;
+  input.value = "";
+  chat.scrollTop = chat.scrollHeight;
 
-        const data = await response.json();
-        chat.innerHTML += `<div class="msg bot"><strong>ChatGPT:</strong><br>${data.reply}</div>`;
-        chat.scrollTop = chat.scrollHeight;
-      } catch (err) {
-        chat.innerHTML += `<div class="msg bot"><strong>Erro:</strong><br>Não foi possível obter resposta.</div>`;
-        chat.scrollTop = chat.scrollHeight;
-      }
-    }
-
-    // Enter para enviar
-    document.getElementById("input").addEventListener("keydown", function(e) {
-      if (e.key === "Enter") sendMessage();
+  try {
+    const response = await fetch('https://backand-ofxw.onrender.com/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: msg })
     });
-  </script>
-</body>
-</html>
+
+    const data = await response.json();
+    chat.innerHTML += `<div class="msg bot"><strong>ChatGPT:</strong><br>${data.reply}</div>`;
+    chat.scrollTop = chat.scrollHeight;
+  } catch (err) {
+    console.error("Erro ao buscar resposta:", err); // 👈 log de erro
+    chat.innerHTML += `<div class="msg bot"><strong>Erro:</strong><br>Não foi possível obter resposta.</div>`;
+    chat.scrollTop = chat.scrollHeight;
+  }
+}
