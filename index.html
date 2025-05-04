@@ -105,36 +105,46 @@
     <div id="chat"></div>
     <div id="input-area">
       <input id="input" placeholder="Digite sua pergunta..." />
-      <button onclick="sendMessage()">Enviar</button>
+      <button id="sendBtn">Enviar</button>
     </div>
   </div>
 
+  <!-- ✅ Coloque o script no final para garantir que os elementos já existam -->
   <script>
     async function sendMessage() {
-  const input = document.getElementById("input");
-  const chat = document.getElementById("chat");
-  const msg = input.value.trim();
-  if (!msg) return;
+      const input = document.getElementById("input");
+      const chat = document.getElementById("chat");
+      const msg = input.value.trim();
+      if (!msg) return;
 
-  console.log("Mensagem enviada:", msg); // 👈 log para teste
+      console.log("Mensagem enviada:", msg);
 
-  chat.innerHTML += `<div class="msg user"><strong>Você:</strong><br>${msg}</div>`;
-  input.value = "";
-  chat.scrollTop = chat.scrollHeight;
+      chat.innerHTML += `<div class="msg user"><strong>Você:</strong><br>${msg}</div>`;
+      input.value = "";
+      chat.scrollTop = chat.scrollHeight;
 
-  try {
-    const response = await fetch('https://backand-ofxw.onrender.com/chat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: msg })
+      try {
+        const response = await fetch('https://backand-ofxw.onrender.com/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: msg })
+        });
+
+        const data = await response.json();
+        chat.innerHTML += `<div class="msg bot"><strong>ChatGPT:</strong><br>${data.reply}</div>`;
+        chat.scrollTop = chat.scrollHeight;
+      } catch (err) {
+        console.error("Erro ao buscar resposta:", err);
+        chat.innerHTML += `<div class="msg bot"><strong>Erro:</strong><br>Não foi possível obter resposta.</div>`;
+        chat.scrollTop = chat.scrollHeight;
+      }
+    }
+
+    // ✅ Adiciona o evento quando a página estiver carregada
+    document.getElementById("sendBtn").addEventListener("click", sendMessage);
+    document.getElementById("input").addEventListener("keydown", function (e) {
+      if (e.key === "Enter") sendMessage();
     });
-
-    const data = await response.json();
-    chat.innerHTML += `<div class="msg bot"><strong>ChatGPT:</strong><br>${data.reply}</div>`;
-    chat.scrollTop = chat.scrollHeight;
-  } catch (err) {
-    console.error("Erro ao buscar resposta:", err); // 👈 log de erro
-    chat.innerHTML += `<div class="msg bot"><strong>Erro:</strong><br>Não foi possível obter resposta.</div>`;
-    chat.scrollTop = chat.scrollHeight;
-  }
-}
+  </script>
+</body>
+</html>
