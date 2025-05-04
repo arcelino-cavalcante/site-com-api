@@ -121,7 +121,8 @@
       chat.scrollTop = chat.scrollHeight;
 
       try {
-        const response = await fetch('https://backand-ofxw.onrender.com', {
+        const response = await fetch('const response = await fetch('https://backand-ofxw.onrender.com/chat', {
+', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ message: msg })
